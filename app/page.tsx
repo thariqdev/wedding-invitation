@@ -9,6 +9,7 @@ import Countdown from "@/components/cinematic/Countdown";
 import EventsReel from "@/components/cinematic/EventsReel";
 import ClosingCredits from "@/components/cinematic/ClosingCredits";
 import ScrollHint from "@/components/cinematic/ScrollHint";
+import BougainvilleaBg from "@/components/cinematic/BougainvilleaBg";
 import { AmbientMusic } from "@/components/cinematic/ambient";
 
 export default function Page() {
@@ -50,18 +51,23 @@ export default function Page() {
   };
 
   return (
-    <main className="relative overflow-x-hidden bg-black text-[#e9e2d2]">
-      <CinematicFrame />
+    <>
+      {/* fixed backdrop behind everything (auto-shows only if the image exists) */}
+      <BougainvilleaBg />
 
-      <TrailerScenes />
-      <Countdown />
-      <EventsReel />
-      <ClosingCredits />
+      <main className="relative z-10 overflow-x-hidden text-[#e9e2d2]">
+        <CinematicFrame />
 
-      {started && <SoundToggle on={soundOn} onToggle={toggleSound} />}
-      {started && <ScrollHint />}
+        <TrailerScenes />
+        <Countdown />
+        <EventsReel />
+        <ClosingCredits />
 
-      <OpeningGate onBegin={begin} hidden={started} />
-    </main>
+        {started && <SoundToggle on={soundOn} onToggle={toggleSound} />}
+        {started && <ScrollHint />}
+
+        <OpeningGate onBegin={begin} hidden={started} />
+      </main>
+    </>
   );
 }
