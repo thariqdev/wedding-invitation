@@ -45,7 +45,7 @@ export default function Page() {
   };
 
   return (
-    <main className="relative bg-black text-[#e9e2d2]">
+    <main className="relative overflow-x-hidden bg-black text-[#e9e2d2]">
       {/* ambient score — optional; silently no-ops if /music.mp3 is absent */}
       <audio ref={audioRef} src="/music.mp3" loop preload="none" />
 

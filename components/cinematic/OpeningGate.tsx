@@ -36,24 +36,24 @@ export default function OpeningGate({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.3 }}
-        className="text-[0.7rem] uppercase tracking-[0.6em] text-[#9aa6b2]"
+        className="px-6 text-[0.66rem] uppercase tracking-[0.55em] text-[#9aa6b2]"
         style={{ fontFamily: "var(--font-cinzel)" }}
       >
-        A Short Film
+        Together with their families
       </motion.p>
 
       <motion.h1
         initial={{ opacity: 0, scale: 1.1, filter: "blur(8px)" }}
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         transition={{ duration: 1.4, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-6 text-[clamp(2.6rem,12vw,6rem)] uppercase leading-[0.9] tracking-[0.04em] text-[#f2e6c8]"
+        className="mt-6 flex flex-col items-center px-4 text-[clamp(2.6rem,14vw,6rem)] uppercase leading-[0.95] tracking-[0.03em] text-[#f2e6c8]"
         style={{ fontFamily: "var(--font-playfair)", fontWeight: 700 }}
       >
-        {wedding.bride.first}
-        <span className="mx-3 text-[#e6b450]" style={{ fontFamily: "var(--font-vibes)", textTransform: "none" }}>
+        <span>{wedding.bride.first}</span>
+        <span className="my-1 text-[0.6em] text-[#e6b450]" style={{ fontFamily: "var(--font-vibes)", textTransform: "none" }}>
           &amp;
         </span>
-        {wedding.groom.first}
+        <span>{wedding.groom.first}</span>
       </motion.h1>
 
       <motion.div

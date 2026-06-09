@@ -116,7 +116,7 @@ export default function TrailerScenes() {
           Save the Date
         </p>
         <p
-          className="mt-6 text-[clamp(2.8rem,14vw,7rem)] leading-none text-[#e6b450]"
+          className="mt-6 whitespace-nowrap text-[clamp(1.9rem,10vw,6rem)] leading-none text-[#e6b450]"
           style={{ fontFamily: "var(--font-playfair)", fontWeight: 600, textShadow: "0 0 50px rgba(230,180,80,0.35)" }}
         >
           {DATE}
