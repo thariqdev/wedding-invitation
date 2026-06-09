@@ -1,0 +1,939 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Wedding Invitation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* =========================================================
+   EDIT YOUR DETAILS IN THE <script> CONFIG AT THE BOTTOM.
+   This stylesheet defines the cinematic stage and motion.
+   ========================================================= */
+
+:root{
+  --ink-0: #07050a;
+  --ink-1: #0d0813;
+  --ink-2: #1a1018;
+  --ink-warm: #1d130c;
+  --gold-1: #f6e7b4;      /* highlight */
+  --gold-2: #d9b367;      /* primary  */
+  --gold-3: #a8823a;      /* shadow   */
+  --gold-glow: rgba(217,179,103,0.55);
+  --paper:  #f4ead7;
+  --serif: "Cormorant Garamond", "Times New Roman", serif;
+  --display: "Cinzel", "Cormorant Garamond", serif;
+  --arabic: "Amiri", "Aref Ruqaa", serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;overflow:hidden;color:var(--paper);font-family:var(--serif);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+
+/* Outer page — keeps the 9:16 stage centered with a vignette around it on desktop */
+.page{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(ellipse at center, #0a0610 0%, #000 70%);
+}
+
+/* The stage.
+   - On portrait phones (viewport narrower than 9:16) → fill the screen edge-to-edge
+     so modern tall phones (iPhone ~9:19.5) don't show black letterbox bars.
+   - On tablets, desktop, and landscape phones → centered 9:16 phone-shaped frame. */
+.stage{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+  background: radial-gradient(120% 80% at 50% 30%, #150d1c 0%, #0a0610 55%, #050308 100%);
+  box-shadow: 0 30px 120px rgba(0,0,0,0.8), 0 0 0 1px rgba(217,179,103,0.06) inset;
+  isolation:isolate;
+}
+@media (min-aspect-ratio: 9/16){
+  .stage{
+    width:auto;
+    aspect-ratio: 9 / 16;
+    max-width:100vw;
+  }
+}
+
+/* Background canvases (particles + light leaks) */
+.bg-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.bg-canvas.leaks{mix-blend-mode:screen;opacity:.55}
+.bg-canvas.particles{mix-blend-mode:screen}
+
+/* Subtle film grain — adds the "cinematic" look */
+.grain{
+  position:absolute;inset:-20%;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  opacity:.35;mix-blend-mode:overlay;
+  animation: grain-shift 1.6s steps(6) infinite;
+}
+@keyframes grain-shift{
+  0%{transform:translate(0,0)} 20%{transform:translate(-2%,1%)} 40%{transform:translate(1%,-2%)}
+  60%{transform:translate(-1%,2%)} 80%{transform:translate(2%,1%)} 100%{transform:translate(0,0)}
+}
+
+/* Outer vignette */
+.vignette{
+  position:absolute;inset:0;pointer-events:none;
+  background: radial-gradient(120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,0.85) 100%);
+}
+
+/* Scene container — every scene is absolutely positioned and crossfades */
+.scenes{position:absolute;inset:0}
+.scene{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding: 8% 8%;
+  opacity:0;
+  transform: scale(1.04);
+  filter: blur(8px);
+  transition:
+    opacity 900ms cubic-bezier(.22,1,.36,1),
+    transform 1400ms cubic-bezier(.22,1,.36,1),
+    filter 900ms cubic-bezier(.22,1,.36,1);
+  will-change: opacity, transform, filter;
+}
+.scene.active{
+  opacity:1;
+  transform: scale(1);
+  filter: blur(0);
+}
+.scene.exiting{
+  opacity:0;
+  transform: scale(.985);
+  filter: blur(6px);
+  transition:
+    opacity 700ms cubic-bezier(.4,0,.2,1),
+    transform 1000ms cubic-bezier(.4,0,.2,1),
+    filter 700ms cubic-bezier(.4,0,.2,1);
+}
+
+/* ==== Typography primitives ==== */
+.eyebrow{
+  font-family:var(--display);
+  font-weight:500;
+  letter-spacing:.6em;
+  text-transform:uppercase;
+  font-size: clamp(9px, 1.6vh, 14px);
+  color:var(--gold-2);
+  margin-bottom: 2.2vh;
+  opacity:.9;
+}
+.divider{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  margin: 2.4vh 0;
+  color: var(--gold-2);
+}
+.divider .line{
+  height:1px;width:clamp(40px, 9vw, 90px);
+  background: linear-gradient(90deg, transparent, var(--gold-2), transparent);
+  opacity:.85;
+}
+.divider .diamond{
+  width:6px;height:6px;background:var(--gold-1);
+  transform: rotate(45deg);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+.kicker{
+  font-family:var(--display);font-weight:400;
+  letter-spacing:.5em;text-transform:uppercase;
+  font-size: clamp(10px, 1.5vh, 13px);
+  color: rgba(246,231,180,.75);
+}
+.label{
+  font-family:var(--display);font-weight:500;
+  letter-spacing:.42em;text-transform:uppercase;
+  font-size: clamp(10px, 1.6vh, 14px);
+  color: var(--gold-2);
+}
+.script{
+  font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size: clamp(20px, 3.4vh, 30px);
+  color: var(--paper);
+  letter-spacing:.02em;
+}
+.amp{
+  font-family:var(--serif);font-style:italic;font-weight:300;
+  color:var(--gold-2);
+  font-size: clamp(28px, 5vh, 48px);
+  margin: 1.2vh 0;
+  opacity:.9;
+}
+
+/* ==== Letter-by-letter reveal ==== */
+.reveal .word, .reveal .letter{display:inline-block;opacity:0;transform:translateY(14px) scale(.98);filter:blur(8px)}
+.reveal.go .word, .reveal.go .letter{
+  opacity:1;transform:translateY(0) scale(1);filter:blur(0);
+  transition:
+    opacity 800ms cubic-bezier(.22,1,.36,1),
+    transform 900ms cubic-bezier(.22,1,.36,1),
+    filter  800ms cubic-bezier(.22,1,.36,1);
+}
+
+/* ==== Scene 1: Bismillah ==== */
+.bismillah-arabic{
+  font-family:var(--arabic);
+  font-weight:400;
+  font-size: clamp(34px, 6.4vh, 64px);
+  color: var(--gold-1);
+  line-height:1.6;
+  text-shadow: 0 0 22px var(--gold-glow), 0 0 60px rgba(217,179,103,.25);
+  direction: rtl;
+  margin-bottom: 2.6vh;
+}
+.bismillah-translit{
+  font-family:var(--display);
+  letter-spacing:.32em;
+  font-size: clamp(11px, 1.7vh, 15px);
+  color: rgba(246,231,180,.78);
+  text-transform: uppercase;
+}
+
+/* ==== Scene 2: Blessing line ==== */
+.blessing{
+  text-align:center;
+  font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size: clamp(24px, 4.2vh, 40px);
+  color:var(--paper);
+  line-height:1.35;
+  max-width: 80%;
+}
+.blessing em{
+  font-style:italic;color:var(--gold-1);
+  text-shadow: 0 0 18px var(--gold-glow);
+}
+
+/* ==== Scene 3: Crescent reveal ==== */
+.crescent-wrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:3.5vh}
+.crescent{
+  width: clamp(140px, 28vh, 240px);
+  height: clamp(140px, 28vh, 240px);
+  filter: drop-shadow(0 0 30px var(--gold-glow)) drop-shadow(0 0 80px rgba(217,179,103,.2));
+}
+.crescent-line{
+  font-family:var(--display);letter-spacing:.55em;text-transform:uppercase;
+  font-size: clamp(10px, 1.6vh, 14px);
+  color: var(--gold-2);
+}
+
+/* ==== Scene: names ==== */
+.couple-name{
+  font-family:var(--serif);
+  font-weight:400;
+  font-size: clamp(48px, 11vh, 110px);
+  line-height:1;
+  color: var(--gold-1);
+  text-shadow: 0 0 28px var(--gold-glow), 0 0 70px rgba(217,179,103,.18);
+  letter-spacing:.02em;
+}
+.couple-name .surname{
+  display:block;
+  font-family:var(--display);font-weight:400;
+  font-size: clamp(12px, 1.7vh, 15px);
+  color: var(--gold-2);
+  letter-spacing:.5em;
+  text-transform:uppercase;
+  margin-top: 2.4vh;
+  text-shadow:none;
+}
+
+/* ==== Glass info card (date / venue / reception) ==== */
+.card{
+  position:relative;
+  width: min(86%, 520px);
+  padding: 4.2vh 6%;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255,240,210,0.06), rgba(255,240,210,0.02));
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border:1px solid rgba(217,179,103,.22);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.55),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  text-align:center;
+}
+.card::before,.card::after{
+  content:"";position:absolute;width:28px;height:28px;
+  border:1px solid var(--gold-2); opacity:.7;
+}
+.card::before{top:8px;left:8px;border-right:none;border-bottom:none}
+.card::after{bottom:8px;right:8px;border-left:none;border-top:none}
+
+.date-line{
+  font-family:var(--serif);font-weight:400;
+  font-size: clamp(40px, 8vh, 80px);
+  color: var(--gold-1);
+  letter-spacing:.04em;
+  line-height:1;
+  text-shadow: 0 0 22px var(--gold-glow);
+}
+.date-meta{
+  margin-top: 2.2vh;
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  color: rgba(246,231,180,.85);
+  font-family:var(--display);letter-spacing:.36em;text-transform:uppercase;
+  font-size: clamp(10px, 1.5vh, 13px);
+}
+.date-meta .dot{width:4px;height:4px;background:var(--gold-2);border-radius:50%;opacity:.9}
+
+.venue-name{
+  font-family:var(--serif);font-weight:400;
+  font-size: clamp(28px, 5vh, 46px);
+  color: var(--gold-1);
+  line-height:1.15;
+  letter-spacing:.02em;
+  margin-top: 1.4vh;
+  text-shadow: 0 0 18px var(--gold-glow);
+}
+.venue-sub{
+  font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size: clamp(14px, 2.1vh, 19px);
+  color: rgba(244,234,215,.78);
+  margin-top: 1.4vh;
+}
+.venue-time{
+  margin-top: 2.4vh;
+  font-family:var(--display);letter-spacing:.42em;text-transform:uppercase;
+  color: var(--gold-2);
+  font-size: clamp(11px, 1.6vh, 14px);
+}
+
+/* ==== Family names ==== */
+.families{
+  display:flex;flex-direction:column;align-items:center;gap:2.6vh;
+  width:min(86%, 520px);text-align:center;
+}
+.family-block{}
+.family-role{
+  font-family:var(--display);
+  letter-spacing:.5em;text-transform:uppercase;
+  color: var(--gold-2);
+  font-size: clamp(10px, 1.4vh, 12px);
+  margin-bottom: 1.2vh;
+}
+.family-names{
+  font-family:var(--serif);font-weight:400;
+  color: var(--paper);
+  font-size: clamp(20px, 3.2vh, 28px);
+  letter-spacing:.02em;
+  line-height:1.35;
+}
+.family-names .amp{display:inline;margin:0 .25em;font-size:.9em}
+
+/* ==== Save the date ==== */
+.std-large{
+  font-family:var(--serif);font-weight:400;
+  font-size: clamp(56px, 12vh, 130px);
+  line-height:1;
+  color: var(--gold-1);
+  text-shadow: 0 0 30px var(--gold-glow), 0 0 90px rgba(217,179,103,.2);
+  letter-spacing:.04em;
+  text-align:center;
+}
+.std-large em{font-style:italic;font-weight:300;color:var(--gold-2)}
+.std-tag{
+  margin-top: 3vh;
+  text-align:center;
+  font-family:var(--serif);font-weight:300;font-style:italic;
+  font-size: clamp(18px, 2.8vh, 26px);
+  color: rgba(244,234,215,.9);
+  max-width:80%;
+  line-height:1.5;
+}
+
+/* ==== Decorative SVG ornaments ==== */
+.corner{
+  position:absolute;width: clamp(60px, 12vh, 110px);height:auto;
+  opacity:.85;color:var(--gold-2);
+  filter: drop-shadow(0 0 12px var(--gold-glow));
+  pointer-events:none;
+}
+/* Use safe-area-inset on iPhone so corner ornaments clear the notch / home indicator */
+.corner.tl{top:calc(3.5% + env(safe-area-inset-top, 0px));left:6%}
+.corner.tr{top:calc(3.5% + env(safe-area-inset-top, 0px));right:6%;transform:scaleX(-1)}
+.corner.bl{bottom:calc(3.5% + env(safe-area-inset-bottom, 0px));left:6%;transform:scaleY(-1)}
+.corner.br{bottom:calc(3.5% + env(safe-area-inset-bottom, 0px));right:6%;transform:scale(-1,-1)}
+
+.geo-pattern{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  pointer-events:none;opacity:0;transition: opacity 1200ms ease;
+}
+.geo-pattern.show{opacity:.18}
+.geo-pattern svg{width: 78%; height:auto; color: var(--gold-2)}
+
+/* ==== Start overlay ==== */
+.start{
+  position:absolute;inset:0;z-index:50;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh;
+  background: radial-gradient(ellipse at center, #120a18 0%, #050308 80%);
+  cursor:pointer;
+  transition: opacity 800ms ease;
+}
+.start.hide{opacity:0;pointer-events:none}
+.start .tap{
+  font-family:var(--display);letter-spacing:.6em;text-transform:uppercase;
+  font-size: clamp(11px, 1.7vh, 14px);
+  color: var(--gold-2);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* ==== Floating motion for crescent on entry ==== */
+.float-in{animation: floatIn 2200ms cubic-bezier(.22,1,.36,1) both}
+@keyframes floatIn{
+  0%{opacity:0;transform: translateY(40px) scale(.86); filter: blur(20px)}
+  100%{opacity:1;transform: translateY(0) scale(1); filter: blur(0)}
+}
+
+/* ==== Caption used on save-the-date ==== */
+.final-frame{
+  position:absolute;inset:6% 8%;
+  border:1px solid rgba(217,179,103,.35);
+  pointer-events:none;
+  opacity:0;
+  transition: opacity 900ms ease;
+}
+.final-frame.show{opacity:1}
+.final-frame::before, .final-frame::after{
+  content:"";position:absolute;width:14px;height:14px;background:var(--gold-2);transform:rotate(45deg);
+}
+.final-frame::before{top:-7px;left:50%;margin-left:-7px}
+.final-frame::after{bottom:-7px;left:50%;margin-left:-7px}
+
+/* helper */
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="stage" id="stage">
+
+    <!-- Background layers -->
+    <canvas class="bg-canvas leaks" id="leaks"></canvas>
+    <canvas class="bg-canvas particles" id="particles"></canvas>
+    <div class="grain"></div>
+    <div class="vignette"></div>
+
+    <!-- Persistent Islamic geometric pattern (fades in/out across scenes) -->
+    <div class="geo-pattern" id="geo">
+      <svg viewBox="0 0 600 600" fill="none" stroke="currentColor" stroke-width="0.6">
+        <defs>
+          <pattern id="islamicStar" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+            <!-- 8-point star -->
+            <g transform="translate(60 60)">
+              <polygon points="0,-50 14,-14 50,0 14,14 0,50 -14,14 -50,0 -14,-14" />
+              <polygon points="0,-50 14,-14 50,0 14,14 0,50 -14,14 -50,0 -14,-14" transform="rotate(45)" />
+              <circle r="20" />
+              <circle r="50" />
+            </g>
+          </pattern>
+        </defs>
+        <rect width="600" height="600" fill="url(#islamicStar)"/>
+      </svg>
+    </div>
+
+    <!-- Decorative corners (always visible) -->
+    <svg class="corner tl" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M2 40 Q2 2 40 2" />
+      <path d="M10 36 Q10 10 36 10" opacity=".6"/>
+      <circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/>
+      <path d="M40 2 Q55 6 60 16 M2 40 Q6 55 16 60" opacity=".5"/>
+      <path d="M30 30 q8 -10 20 -10 M30 30 q-10 8 -10 20" opacity=".5"/>
+    </svg>
+    <svg class="corner tr" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M2 40 Q2 2 40 2" />
+      <path d="M10 36 Q10 10 36 10" opacity=".6"/>
+      <circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/>
+      <path d="M40 2 Q55 6 60 16 M2 40 Q6 55 16 60" opacity=".5"/>
+      <path d="M30 30 q8 -10 20 -10 M30 30 q-10 8 -10 20" opacity=".5"/>
+    </svg>
+    <svg class="corner bl" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M2 40 Q2 2 40 2" />
+      <path d="M10 36 Q10 10 36 10" opacity=".6"/>
+      <circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/>
+      <path d="M40 2 Q55 6 60 16 M2 40 Q6 55 16 60" opacity=".5"/>
+      <path d="M30 30 q8 -10 20 -10 M30 30 q-10 8 -10 20" opacity=".5"/>
+    </svg>
+    <svg class="corner br" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1">
+      <path d="M2 40 Q2 2 40 2" />
+      <path d="M10 36 Q10 10 36 10" opacity=".6"/>
+      <circle cx="20" cy="20" r="2" fill="currentColor" stroke="none"/>
+      <path d="M40 2 Q55 6 60 16 M2 40 Q6 55 16 60" opacity=".5"/>
+      <path d="M30 30 q8 -10 20 -10 M30 30 q-10 8 -10 20" opacity=".5"/>
+    </svg>
+
+    <div class="final-frame" id="finalFrame"></div>
+
+    <!-- Scenes -->
+    <div class="scenes">
+
+      <!-- 1. Bismillah -->
+      <section class="scene" data-scene="bismillah">
+        <div class="center">
+          <div class="bismillah-arabic reveal" id="rev-arabic">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="bismillah-translit reveal" id="rev-translit">Bismillah&nbsp;ir-Rahman&nbsp;ir-Raheem</div>
+        </div>
+      </section>
+
+      <!-- 2. With the blessings of Allah -->
+      <section class="scene" data-scene="blessing">
+        <div class="center">
+          <div class="kicker">In&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;Most&nbsp;Merciful</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="blessing reveal" id="rev-blessing">
+            With&nbsp;the&nbsp;blessings&nbsp;of&nbsp;<em>Allah</em><br/>and&nbsp;our&nbsp;families
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Crescent -->
+      <section class="scene" data-scene="crescent">
+        <div class="crescent-wrap">
+          <svg class="crescent float-in" viewBox="-100 -100 200 200" fill="none">
+            <defs>
+              <radialGradient id="moonGlow" cx="0" cy="0" r="1">
+                <stop offset="0%" stop-color="#f6e7b4" stop-opacity="0.7"/>
+                <stop offset="60%" stop-color="#d9b367" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#d9b367" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="moonFill" x1="0" y1="-1" x2="0" y2="1">
+                <stop offset="0%" stop-color="#fff3c8"/>
+                <stop offset="100%" stop-color="#c89a4b"/>
+              </linearGradient>
+              <mask id="cresMask">
+                <rect x="-100" y="-100" width="200" height="200" fill="black"/>
+                <circle cx="0" cy="0" r="62" fill="white"/>
+                <circle cx="22" cy="-10" r="58" fill="black"/>
+              </mask>
+            </defs>
+            <circle cx="0" cy="0" r="95" fill="url(#moonGlow)"/>
+            <rect x="-100" y="-100" width="200" height="200" fill="url(#moonFill)" mask="url(#cresMask)"/>
+            <!-- small star -->
+            <g transform="translate(40 -40)" fill="#f6e7b4">
+              <polygon points="0,-8 2,-2 8,0 2,2 0,8 -2,2 -8,0 -2,-2" />
+            </g>
+          </svg>
+          <div class="crescent-line">Together&nbsp;Forever&nbsp;·&nbsp;Inshallah</div>
+        </div>
+      </section>
+
+      <!-- 4. Bride -->
+      <section class="scene" data-scene="bride">
+        <div class="center">
+          <div class="label">The&nbsp;Bride</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="couple-name reveal" id="rev-bride">
+            <span class="name-text"></span>
+            <span class="surname"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Groom -->
+      <section class="scene" data-scene="groom">
+        <div class="center">
+          <div class="amp">&amp;</div>
+          <div class="label">The&nbsp;Groom</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="couple-name reveal" id="rev-groom">
+            <span class="name-text"></span>
+            <span class="surname"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Date -->
+      <section class="scene" data-scene="date">
+        <div class="center">
+          <div class="label">Save&nbsp;the&nbsp;Date</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="card">
+            <div class="date-line" id="dateLine"></div>
+            <div class="date-meta">
+              <span id="dateDay"></span><span class="dot"></span><span id="dateMonth"></span><span class="dot"></span><span id="dateYear"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Nikah venue -->
+      <section class="scene" data-scene="nikah">
+        <div class="center">
+          <div class="label">Nikah&nbsp;Ceremony</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="card">
+            <div class="venue-name" id="nikahVenue"></div>
+            <div class="venue-sub" id="nikahAddress"></div>
+            <div class="venue-time" id="nikahTime"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Reception -->
+      <section class="scene" data-scene="reception">
+        <div class="center">
+          <div class="label">Walima&nbsp;·&nbsp;Reception</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="card">
+            <div class="venue-name" id="recVenue"></div>
+            <div class="venue-sub" id="recAddress"></div>
+            <div class="venue-time" id="recTime"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Families -->
+      <section class="scene" data-scene="families">
+        <div class="center">
+          <div class="label">With&nbsp;Love&nbsp;From</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="families">
+            <div class="family-block">
+              <div class="family-role">Bride's Family</div>
+              <div class="family-names" id="brideFamily"></div>
+            </div>
+            <div class="family-block">
+              <div class="family-role">Groom's Family</div>
+              <div class="family-names" id="groomFamily"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10. Save the Date hero -->
+      <section class="scene" data-scene="std">
+        <div class="center">
+          <div class="kicker">Mark&nbsp;Your&nbsp;Calendar</div>
+          <div class="divider"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="std-large reveal" id="rev-std"><em>Save</em>&nbsp;the&nbsp;Date</div>
+        </div>
+      </section>
+
+      <!-- 11. Closing -->
+      <section class="scene" data-scene="closing">
+        <div class="center">
+          <svg class="crescent" style="width:clamp(70px,12vh,110px);height:auto;margin-bottom:2.4vh" viewBox="-100 -100 200 200" fill="none">
+            <defs>
+              <mask id="cresMask2"><rect x="-100" y="-100" width="200" height="200" fill="black"/><circle cx="0" cy="0" r="62" fill="white"/><circle cx="22" cy="-10" r="58" fill="black"/></mask>
+              <linearGradient id="moonFill2" x1="0" y1="-1" x2="0" y2="1"><stop offset="0%" stop-color="#fff3c8"/><stop offset="100%" stop-color="#c89a4b"/></linearGradient>
+            </defs>
+            <rect x="-100" y="-100" width="200" height="200" fill="url(#moonFill2)" mask="url(#cresMask2)"/>
+          </svg>
+          <div class="std-tag" style="font-size:clamp(20px,3.2vh,28px);max-width:90%">
+            We&nbsp;request&nbsp;your&nbsp;<em style="color:var(--gold-1)">prayers</em>&nbsp;and&nbsp;<em style="color:var(--gold-1)">presence</em>
+          </div>
+          <div class="divider" style="margin-top:3vh"><span class="line"></span><span class="diamond"></span><span class="line"></span></div>
+          <div class="kicker" id="closingNames"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Tap to begin overlay -->
+    <div class="start" id="start">
+      <svg class="crescent" style="width:clamp(120px,22vh,200px);height:auto" viewBox="-100 -100 200 200" fill="none">
+        <defs>
+          <mask id="cresMask3"><rect x="-100" y="-100" width="200" height="200" fill="black"/><circle cx="0" cy="0" r="62" fill="white"/><circle cx="22" cy="-10" r="58" fill="black"/></mask>
+          <linearGradient id="moonFill3" x1="0" y1="-1" x2="0" y2="1"><stop offset="0%" stop-color="#fff3c8"/><stop offset="100%" stop-color="#c89a4b"/></linearGradient>
+        </defs>
+        <rect x="-100" y="-100" width="200" height="200" fill="url(#moonFill3)" mask="url(#cresMask3)"/>
+      </svg>
+      <div class="tap">Tap&nbsp;to&nbsp;Begin</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   ⬇⬇⬇ EDIT YOUR WEDDING DETAILS HERE ⬇⬇⬇
+   ========================================================= */
+const CONFIG = {
+  bride: {
+    first: "Aaminah",
+    surname: "D/o Mohammed Iqbal"
+  },
+  groom: {
+    first: "Yusuf",
+    surname: "S/o Abdul Rahman"
+  },
+  date: {
+    weekday: "Sunday",
+    day: "14",
+    month: "December",
+    year: "2026",
+    big: "14·12·2026"            // shown large in the date card
+  },
+  nikah: {
+    venue: "Jamia Masjid Al-Noor",
+    address: "MG Road · Bengaluru",
+    time: "Sunday · 4:00 PM"
+  },
+  reception: {
+    venue: "The Royal Banquet Hall",
+    address: "Brigade Road · Bengaluru",
+    time: "Sunday · 7:30 PM"
+  },
+  families: {
+    bride: "Mr. & Mrs. Mohammed Iqbal",
+    groom: "Mr. & Mrs. Abdul Rahman"
+  }
+};
+/* =========================================================
+   ⬆⬆⬆ STOP EDITING HERE ⬆⬆⬆
+   ========================================================= */
+
+
+/* ---------- Inject content from CONFIG ---------- */
+function setText(id, v){ const el = document.getElementById(id); if (el) el.textContent = v; }
+
+(function inject(){
+  // Bride
+  const bride = document.querySelector('#rev-bride');
+  bride.querySelector('.name-text').textContent = CONFIG.bride.first;
+  bride.querySelector('.surname').textContent  = CONFIG.bride.surname;
+  // Groom
+  const groom = document.querySelector('#rev-groom');
+  groom.querySelector('.name-text').textContent = CONFIG.groom.first;
+  groom.querySelector('.surname').textContent  = CONFIG.groom.surname;
+  // Date
+  setText('dateLine', CONFIG.date.big);
+  setText('dateDay', CONFIG.date.weekday);
+  setText('dateMonth', CONFIG.date.month);
+  setText('dateYear', CONFIG.date.year);
+  // Nikah
+  setText('nikahVenue', CONFIG.nikah.venue);
+  setText('nikahAddress', CONFIG.nikah.address);
+  setText('nikahTime', CONFIG.nikah.time);
+  // Reception
+  setText('recVenue', CONFIG.reception.venue);
+  setText('recAddress', CONFIG.reception.address);
+  setText('recTime', CONFIG.reception.time);
+  // Families
+  document.getElementById('brideFamily').innerHTML =
+    CONFIG.families.bride.replace(/&/g,'<span class="amp">&amp;</span>');
+  document.getElementById('groomFamily').innerHTML =
+    CONFIG.families.groom.replace(/&/g,'<span class="amp">&amp;</span>');
+  // Closing names
+  setText('closingNames', `${CONFIG.bride.first}  ·  ${CONFIG.groom.first}`);
+})();
+
+
+/* ---------- Letter-by-letter reveal helper ---------- */
+function splitWords(el){
+  // Replace text nodes only — preserve nested <em>/<br>
+  function processNode(node){
+    if (node.nodeType === Node.TEXT_NODE){
+      const frag = document.createDocumentFragment();
+      const words = node.textContent.split(/(\s+)/);
+      words.forEach((w,i) => {
+        if (w.trim() === ''){
+          frag.appendChild(document.createTextNode(w));
+        } else {
+          const span = document.createElement('span');
+          span.className = 'word';
+          span.textContent = w;
+          frag.appendChild(span);
+        }
+      });
+      node.parentNode.replaceChild(frag, node);
+    } else if (node.nodeType === Node.ELEMENT_NODE){
+      Array.from(node.childNodes).forEach(processNode);
+    }
+  }
+  Array.from(el.childNodes).forEach(processNode);
+  // assign staggered delays
+  el.querySelectorAll('.word').forEach((w,i) => {
+    w.style.transitionDelay = (i * 70) + 'ms';
+  });
+}
+document.querySelectorAll('.reveal').forEach(splitWords);
+
+
+/* ---------- Particle background (golden floating particles) ---------- */
+const partCanvas = document.getElementById('particles');
+const pctx = partCanvas.getContext('2d');
+let particles = [];
+
+function sizeCanvas(c){
+  const r = c.parentElement.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  c.width = r.width * dpr;
+  c.height = r.height * dpr;
+  c.style.width = r.width + 'px';
+  c.style.height = r.height + 'px';
+  return dpr;
+}
+let pdpr = sizeCanvas(partCanvas);
+
+function makeParticles(){
+  particles = [];
+  const count = Math.floor((partCanvas.width * partCanvas.height) / (28000));
+  for (let i=0;i<count;i++){
+    particles.push({
+      x: Math.random() * partCanvas.width,
+      y: Math.random() * partCanvas.height,
+      r: (Math.random() * 1.6 + 0.4) * pdpr,
+      vy: -(Math.random() * 0.25 + 0.05) * pdpr,
+      vx: (Math.random() - 0.5) * 0.08 * pdpr,
+      a:  Math.random() * 0.7 + 0.15,
+      tw: Math.random() * Math.PI * 2,
+      twS: Math.random() * 0.02 + 0.01
+    });
+  }
+}
+makeParticles();
+
+function drawParticles(){
+  pctx.clearRect(0,0,partCanvas.width,partCanvas.height);
+  pctx.globalCompositeOperation = 'lighter';
+  for (const p of particles){
+    p.x += p.vx; p.y += p.vy; p.tw += p.twS;
+    if (p.y < -10) { p.y = partCanvas.height + 10; p.x = Math.random()*partCanvas.width; }
+    if (p.x < -10) p.x = partCanvas.width + 10;
+    if (p.x > partCanvas.width + 10) p.x = -10;
+    const flicker = 0.6 + Math.sin(p.tw)*0.4;
+    const grd = pctx.createRadialGradient(p.x,p.y,0, p.x,p.y, p.r*8);
+    grd.addColorStop(0, `rgba(246,231,180,${0.9 * p.a * flicker})`);
+    grd.addColorStop(0.4, `rgba(217,179,103,${0.35 * p.a * flicker})`);
+    grd.addColorStop(1, 'rgba(217,179,103,0)');
+    pctx.fillStyle = grd;
+    pctx.beginPath();
+    pctx.arc(p.x, p.y, p.r*8, 0, Math.PI*2);
+    pctx.fill();
+  }
+}
+
+/* ---------- Light leaks (slow drifting bloom) ---------- */
+const leakCanvas = document.getElementById('leaks');
+const lctx = leakCanvas.getContext('2d');
+let ldpr = sizeCanvas(leakCanvas);
+
+const leaks = [
+  { x:0.20, y:0.30, r:0.55, hue: '#caa15a', phase: Math.random()*Math.PI*2, speed: 0.0003 },
+  { x:0.75, y:0.65, r:0.50, hue: '#e8c97a', phase: Math.random()*Math.PI*2, speed: 0.00022 },
+  { x:0.55, y:0.20, r:0.40, hue: '#b88846', phase: Math.random()*Math.PI*2, speed: 0.00018 },
+];
+function drawLeaks(t){
+  lctx.clearRect(0,0,leakCanvas.width,leakCanvas.height);
+  for (const L of leaks){
+    const cx = (L.x + Math.sin(t * L.speed + L.phase) * 0.06) * leakCanvas.width;
+    const cy = (L.y + Math.cos(t * L.speed + L.phase) * 0.06) * leakCanvas.height;
+    const rad = L.r * Math.min(leakCanvas.width, leakCanvas.height);
+    const grd = lctx.createRadialGradient(cx,cy,0, cx,cy, rad);
+    grd.addColorStop(0, L.hue + 'cc');
+    grd.addColorStop(0.4, L.hue + '40');
+    grd.addColorStop(1, L.hue + '00');
+    lctx.fillStyle = grd;
+    lctx.fillRect(0,0,leakCanvas.width,leakCanvas.height);
+  }
+}
+
+let raf;
+function loop(t){
+  drawParticles();
+  drawLeaks(t || 0);
+  raf = requestAnimationFrame(loop);
+}
+loop();
+
+window.addEventListener('resize', () => {
+  pdpr = sizeCanvas(partCanvas);
+  ldpr = sizeCanvas(leakCanvas);
+  makeParticles();
+});
+
+
+/* ---------- Scene timeline ---------- */
+/* Each scene: id (data-scene), enter time (ms), exit time (ms).
+   Scenes overlap ~600ms for a crossfade feel.
+   Total runtime ~35.5s, then 2.5s fade-out. */
+const timeline = [
+  { id:'bismillah',  enter: 600,   exit: 5200  },
+  { id:'blessing',   enter: 5000,  exit: 8400  },
+  { id:'crescent',   enter: 8200,  exit: 11800 },
+  { id:'bride',      enter: 11600, exit: 15400 },
+  { id:'groom',      enter: 15200, exit: 19000 },
+  { id:'date',       enter: 18800, exit: 22600 },
+  { id:'nikah',      enter: 22400, exit: 26200 },
+  { id:'reception',  enter: 26000, exit: 29800 },
+  { id:'families',   enter: 29600, exit: 32800 },
+  { id:'std',        enter: 32600, exit: 36400 },
+  { id:'closing',    enter: 36200, exit: 41500 },
+];
+
+/* Geo pattern on/off windows (subtle accent in specific scenes) */
+const geoWindows = [
+  { on: 8200,  off: 11800 },   // crescent
+  { on: 32600, off: 41500 },   // save-the-date + closing
+];
+
+/* Final frame in/out */
+const finalFrameWindow = { on: 36200, off: 41500 };
+
+function scheduleScene(s){
+  const node = document.querySelector(`.scene[data-scene="${s.id}"]`);
+  setTimeout(() => {
+    node.classList.add('active');
+    // trigger letter-by-letter reveals inside this scene
+    node.querySelectorAll('.reveal').forEach(r => r.classList.add('go'));
+  }, s.enter);
+  setTimeout(() => {
+    node.classList.add('exiting');
+    node.classList.remove('active');
+  }, s.exit);
+}
+
+function runReel(){
+  timeline.forEach(scheduleScene);
+
+  geoWindows.forEach(w => {
+    setTimeout(() => document.getElementById('geo').classList.add('show'), w.on);
+    setTimeout(() => document.getElementById('geo').classList.remove('show'), w.off);
+  });
+
+  setTimeout(() => document.getElementById('finalFrame').classList.add('show'), finalFrameWindow.on);
+  setTimeout(() => document.getElementById('finalFrame').classList.remove('show'), finalFrameWindow.off);
+
+  // gentle fade-out at the end
+  const stage = document.getElementById('stage');
+  setTimeout(() => {
+    stage.style.transition = 'opacity 2200ms ease';
+    stage.style.opacity = '0';
+  }, 41500);
+
+  // restart for screen-recording loops
+  setTimeout(() => {
+    // reset everything
+    document.querySelectorAll('.scene').forEach(s => {
+      s.classList.remove('active','exiting');
+    });
+    document.querySelectorAll('.reveal').forEach(r => r.classList.remove('go'));
+    document.getElementById('geo').classList.remove('show');
+    document.getElementById('finalFrame').classList.remove('show');
+    stage.style.transition = 'opacity 800ms ease';
+    stage.style.opacity = '1';
+    runReel();
+  }, 44500);
+}
+
+
+/* ---------- Start gate (browsers prefer user gesture) ---------- */
+const start = document.getElementById('start');
+function begin(){
+  start.classList.add('hide');
+  setTimeout(runReel, 700);
+}
+start.addEventListener('click', begin);
+start.addEventListener('touchstart', begin, {passive:true});
+window.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') begin(); });
+</script>
+</body>
+</html>
