@@ -5,7 +5,7 @@ import { wedding } from "@/lib/wedding";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const dt = new Date(wedding.weddingDateISO);
+const dt = new Date(wedding.reception.dateISO);
 const fmt = (o: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", ...o }).format(dt);
 const DATE = `${fmt({ day: "2-digit" })} · ${fmt({ month: "2-digit" })} · ${fmt({ year: "numeric" })}`;
@@ -125,7 +125,13 @@ export default function TrailerScenes() {
           className="mt-7 text-[clamp(1rem,4.6vw,1.4rem)] italic text-[#f2e6c8]"
           style={{ fontFamily: "var(--font-cormorant)" }}
         >
-          {wedding.invitation.venue}, {wedding.invitation.location}
+          {wedding.reception.venue}, {wedding.reception.location}
+        </p>
+        <p
+          className="mt-4 text-[0.66rem] uppercase tracking-[0.4em] text-[#9aa6b2]"
+          style={{ fontFamily: "var(--font-cinzel)" }}
+        >
+          Wedding Reception · {wedding.reception.day} · {wedding.reception.time}
         </p>
       </Scene>
     </>

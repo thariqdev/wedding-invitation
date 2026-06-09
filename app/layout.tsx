@@ -57,7 +57,7 @@ const outfit = Outfit({
 const SITE_URL = "https://nawal-hassan.netlify.app/";
 const TITLE = "Nawal & Hassan | Wedding Invitation";
 const DESCRIPTION =
-  "You are warmly invited to celebrate our special day — the Nikah of Nawal & Hassan, Friday 07 Aug 2026, Vengara, Kerala.";
+  "You are warmly invited to celebrate our special day — the Wedding Reception of Nawal & Hassan, Sunday 09 Aug 2026, Trinita Casa Events & Banquet, Edappally, Kochi.";
 
 const SHARE_IMAGE = {
   url: "/og-image.jpg",

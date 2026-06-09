@@ -47,6 +47,16 @@ export const wedding = {
     verseRef: "30:21",
   },
 
+  // Reception — highlighted as the "Save the Date" headline.
+  reception: {
+    dateISO: "2026-08-09T10:00:00+05:30",
+    date: "09 Aug 2026",
+    day: "Sunday",
+    time: "10:00 AM onwards",
+    venue: "Trinita Casa Events & Banquet",
+    location: "Edappally, Kochi",
+  },
+
   events: [
     {
       id: "mehendi",
@@ -72,8 +82,8 @@ export const wedding = {
       date: "09 Aug",
       day: "Sunday",
       year: "'26",
-      place: "Edappally, Kochi",
-      maps: "https://www.google.com/maps/search/?api=1&query=Edappally+Kochi",
+      place: "Trinita Casa Events & Banquet, Edappally",
+      maps: "https://www.google.com/maps/search/?api=1&query=Trinita+Casa+Events+Banquet+Edappally+Kochi",
     },
   ],
 

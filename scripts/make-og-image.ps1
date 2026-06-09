@@ -87,10 +87,10 @@ $g.FillRectangle($gb, -6, -6, 12, 12)
 $g.Restore($st)
 
 $f_date = New-Object System.Drawing.Font('Georgia', 30, [System.Drawing.FontStyle]::Regular)
-Draw-Centered '07 . 08 . 2026' $f_date $burg2 268
+Draw-Centered '09 . 08 . 2026' $f_date $burg2 268
 
 $f_loc = New-Object System.Drawing.Font('Georgia', 13, [System.Drawing.FontStyle]::Regular)
-Draw-Centered (Spaced 'VENGARA, KERALA') $f_loc $brown 330
+Draw-Centered (Spaced 'EDAPPALLY, KOCHI') $f_loc $brown 330
 
 $f_foot = New-Object System.Drawing.Font('Georgia', 12, [System.Drawing.FontStyle]::Regular)
 Draw-Centered (Spaced 'WEDDING INVITATION') $f_foot $muted 548
