@@ -73,8 +73,14 @@ function Scene({ children, className = "" }: { children: React.ReactNode; classN
 function Line({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="text-[clamp(2.4rem,10vw,5rem)] italic leading-tight text-[#f2e6c8]"
-      style={{ fontFamily: "var(--font-cormorant)", textShadow: "0 2px 30px rgba(0,0,0,0.6)" }}
+      className="text-[clamp(2.4rem,10vw,5rem)] text-[#f2e6c8]"
+      style={{
+        fontFamily: "var(--font-bodoni)",
+        fontWeight: 400,
+        letterSpacing: "0.1em",
+        lineHeight: 1.2,
+        textShadow: "0 2px 30px rgba(0,0,0,0.6)",
+      }}
     >
       {children}
     </p>

@@ -6,6 +6,7 @@ import {
   Playfair_Display,
   Great_Vibes,
   Outfit,
+  Bodoni_Moda,
 } from "next/font/google";
 import "./globals.css";
 
@@ -50,6 +51,14 @@ const outfit = Outfit({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-outfit",
+  display: "swap",
+});
+
+// High-contrast fashion-editorial serif (Black Mango-style)
+const bodoni = Bodoni_Moda({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-bodoni",
   display: "swap",
 });
 
@@ -111,6 +120,7 @@ export default function RootLayout({
         vibes.variable,
         amiri.variable,
         outfit.variable,
+        bodoni.variable,
       ].join(" ")}
     >
       <body className="font-serif">{children}</body>
