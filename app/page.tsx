@@ -7,6 +7,7 @@ import SoundToggle from "@/components/cinematic/SoundToggle";
 import TrailerScenes from "@/components/cinematic/TrailerScenes";
 import EventsReel from "@/components/cinematic/EventsReel";
 import ClosingCredits from "@/components/cinematic/ClosingCredits";
+import ScrollHint from "@/components/cinematic/ScrollHint";
 import { AmbientMusic } from "@/components/cinematic/ambient";
 
 export default function Page() {
@@ -56,6 +57,7 @@ export default function Page() {
       <ClosingCredits />
 
       {started && <SoundToggle on={soundOn} onToggle={toggleSound} />}
+      {started && <ScrollHint />}
 
       <OpeningGate onBegin={begin} hidden={started} />
     </main>

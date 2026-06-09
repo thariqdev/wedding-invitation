@@ -10,16 +10,59 @@ const fmt = (o: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Kolkata", ...o }).format(dt);
 const DATE = `${fmt({ day: "2-digit" })} · ${fmt({ month: "2-digit" })} · ${fmt({ year: "numeric" })}`;
 
+// drifting embers (static so SSR == client)
+const EMBERS = [
+  { l: "14%", s: 4, d: 9, delay: 0 },
+  { l: "34%", s: 3, d: 11, delay: 2 },
+  { l: "54%", s: 5, d: 8, delay: 1 },
+  { l: "74%", s: 3, d: 12, delay: 3 },
+  { l: "88%", s: 4, d: 10, delay: 1.5 },
+];
+
+/** Soft atmospheric backdrop so the dark scenes feel cinematic, not empty. */
+function SceneGlow() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-[80vmin] w-[80vmin] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(230,180,80,0.15), transparent 65%)" }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0.85, 0.5] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <div
+        className="absolute left-[18%] top-[28%] h-[46vmin] w-[46vmin] rounded-full"
+        style={{ background: "radial-gradient(circle, rgba(122,27,33,0.20), transparent 70%)" }}
+      />
+      {EMBERS.map((e, i) => (
+        <span
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            left: e.l,
+            bottom: "-12px",
+            width: `${e.s}px`,
+            height: `${e.s}px`,
+            background: "rgba(230,180,80,0.5)",
+            filter: "blur(0.5px)",
+            animation: `nhEmber ${e.d}s linear ${e.delay}s infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 /** A full-viewport scene whose content slow-zooms + fades in on scroll. */
 function Scene({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <section className={`relative flex min-h-[100svh] items-center justify-center px-6 ${className}`}>
+    <section className={`relative flex min-h-[100svh] items-center justify-center overflow-hidden px-6 ${className}`}>
+      <SceneGlow />
       <motion.div
         initial={{ opacity: 0, scale: 1.16, filter: "blur(10px)" }}
         whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         viewport={{ once: true, amount: 0.55 }}
         transition={{ duration: 1.5, ease: EASE }}
-        className="text-center will-change-transform"
+        className="relative text-center will-change-transform"
       >
         {children}
       </motion.div>
@@ -134,6 +177,14 @@ export default function TrailerScenes() {
           Wedding Reception · {wedding.reception.day} · {wedding.reception.time}
         </p>
       </Scene>
+
+      <style jsx global>{`
+        @keyframes nhEmber {
+          0% { transform: translateY(0) scale(1); opacity: 0; }
+          15% { opacity: 1; }
+          100% { transform: translateY(-72vh) scale(0.4); opacity: 0; }
+        }
+      `}</style>
     </>
   );
 }

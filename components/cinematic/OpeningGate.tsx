@@ -74,7 +74,7 @@ export default function OpeningGate({
           className="text-[0.66rem] uppercase tracking-[0.5em] text-[#9aa6b2]"
           style={{ fontFamily: "var(--font-cinzel)" }}
         >
-          Tap to begin · sound on
+          Tap to begin · then scroll
         </span>
       </motion.div>
 
