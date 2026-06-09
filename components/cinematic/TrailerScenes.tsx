@@ -190,7 +190,13 @@ export default function TrailerScenes() {
           className="mt-4 text-[0.66rem] uppercase tracking-[0.4em] text-[#9aa6b2]"
           style={{ fontFamily: "var(--font-cinzel)" }}
         >
-          Wedding Reception · {wedding.reception.day} · {wedding.reception.time}
+          Wedding Reception · {wedding.reception.day}
+        </p>
+        <p
+          className="mt-1.5 text-[0.66rem] uppercase tracking-[0.4em] text-[#9aa6b2]"
+          style={{ fontFamily: "var(--font-cinzel)" }}
+        >
+          {wedding.reception.time}
         </p>
       </Scene>
 

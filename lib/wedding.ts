@@ -30,7 +30,7 @@ export const wedding = {
     meaning: "In the name of Allah, the Most Gracious, the Most Merciful",
   },
 
-  dua: "With Allah's blessings, we request your presence and duas as we invite you to the Nikah of our beloved daughter.",
+  dua: "With Allah's blessings, we request your presence and duas as we invite you to the Wedding Reception of our beloved daughter.",
 
   invitation: {
     hosts: "Salah Karadan & Nazeem Muttankadan",
