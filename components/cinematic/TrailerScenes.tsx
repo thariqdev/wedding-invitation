@@ -128,25 +128,36 @@ export default function TrailerScenes() {
           transition={{ duration: 1.4, ease: EASE }}
           className="relative text-center"
         >
-          <p className="text-[0.7rem] uppercase tracking-[0.5em] text-[#e6b450]" style={{ fontFamily: "var(--font-cinzel)" }}>
+          <p
+            className="text-[clamp(1.2rem,6vw,2.6rem)] uppercase tracking-[0.28em] text-[#e6b450]"
+            style={{ fontFamily: "var(--font-cinzel)" }}
+          >
             Starring
           </p>
           <h2
-            className="mt-5 text-[clamp(2.6rem,13vw,6rem)] uppercase leading-[0.9] text-[#f5ead0]"
-            style={{ fontFamily: "var(--font-playfair)", fontWeight: 700, textShadow: "0 4px 40px rgba(0,0,0,0.7)" }}
+            className="mt-6 flex flex-col items-center leading-[0.95] text-[#f5ead0]"
+            style={{ fontFamily: "var(--font-playfair)", fontWeight: 700 }}
           >
-            {wedding.bride.first}
-            <span className="block text-[clamp(2rem,8vw,3.4rem)] text-[#e6b450]" style={{ fontFamily: "var(--font-vibes)", fontWeight: 400 }}>
+            <span className="text-[clamp(2.6rem,14vw,5.5rem)] uppercase" style={{ textShadow: "0 4px 40px rgba(0,0,0,0.7)" }}>
+              {wedding.bride.first}
+            </span>
+            <span
+              className="my-3 text-[clamp(3rem,16vw,6.5rem)] leading-none text-[#e6b450] sm:my-5"
+              style={{ fontFamily: "var(--font-vibes)", fontWeight: 400 }}
+            >
               &amp;
             </span>
-            {wedding.groom.first}
+            <span className="text-[clamp(2.6rem,14vw,5.5rem)] uppercase" style={{ textShadow: "0 4px 40px rgba(0,0,0,0.7)" }}>
+              {wedding.groom.first}
+            </span>
           </h2>
-          <p
-            className="mx-auto mt-6 max-w-xs text-[0.72rem] uppercase tracking-[0.22em] text-[#cdbf9f]"
+          <div
+            className="mt-8 flex flex-col items-center gap-1.5 text-[clamp(1rem,4.6vw,2rem)] uppercase leading-tight tracking-[0.12em] text-[#cdbf9f]"
             style={{ fontFamily: "var(--font-cinzel)" }}
           >
-            {wedding.bride.full} · {wedding.groom.full}
-          </p>
+            <span>{wedding.bride.full}</span>
+            <span>{wedding.groom.full}</span>
+          </div>
         </motion.div>
       </section>
 
