@@ -9,20 +9,6 @@ import { motion } from "framer-motion";
 export default function CinematicFrame() {
   return (
     <div className="pointer-events-none fixed inset-0 z-40">
-      {/* letterbox bars */}
-      <motion.div
-        initial={{ height: "50vh" }}
-        animate={{ height: "7vh" }}
-        transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-        className="absolute inset-x-0 top-0 bg-black"
-      />
-      <motion.div
-        initial={{ height: "50vh" }}
-        animate={{ height: "7vh" }}
-        transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-        className="absolute inset-x-0 bottom-0 bg-black"
-      />
-
       {/* vignette */}
       <div
         className="absolute inset-0"
