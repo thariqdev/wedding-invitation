@@ -5,6 +5,7 @@ import CinematicFrame from "@/components/cinematic/CinematicFrame";
 import OpeningGate from "@/components/cinematic/OpeningGate";
 import SoundToggle from "@/components/cinematic/SoundToggle";
 import TrailerScenes from "@/components/cinematic/TrailerScenes";
+import Countdown from "@/components/cinematic/Countdown";
 import EventsReel from "@/components/cinematic/EventsReel";
 import ClosingCredits from "@/components/cinematic/ClosingCredits";
 import ScrollHint from "@/components/cinematic/ScrollHint";
@@ -53,6 +54,7 @@ export default function Page() {
       <CinematicFrame />
 
       <TrailerScenes />
+      <Countdown />
       <EventsReel />
       <ClosingCredits />
 
