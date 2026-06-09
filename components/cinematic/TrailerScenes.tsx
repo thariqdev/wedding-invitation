@@ -129,7 +129,7 @@ export default function TrailerScenes() {
           className="relative text-center"
         >
           <p
-            className="text-[clamp(1.2rem,6vw,2.6rem)] uppercase tracking-[0.28em] text-[#e6b450]"
+            className="text-[clamp(0.7rem,3vw,1.3rem)] uppercase tracking-[0.45em] text-[#e6b450]"
             style={{ fontFamily: "var(--font-cinzel)" }}
           >
             Starring
@@ -151,13 +151,12 @@ export default function TrailerScenes() {
               {wedding.groom.first}
             </span>
           </h2>
-          <div
-            className="mt-8 flex flex-col items-center gap-1.5 text-[clamp(1rem,4.6vw,2rem)] uppercase leading-tight tracking-[0.12em] text-[#cdbf9f]"
+          <p
+            className="mt-7 whitespace-nowrap text-[clamp(0.62rem,3vw,1.2rem)] uppercase tracking-[0.12em] text-[#cdbf9f]"
             style={{ fontFamily: "var(--font-cinzel)" }}
           >
-            <span>{wedding.bride.full}</span>
-            <span>{wedding.groom.full}</span>
-          </div>
+            {wedding.bride.full} · {wedding.groom.full}
+          </p>
         </motion.div>
       </section>
 
