@@ -1,16 +1,8 @@
 [build]
   command = "npm run build"
-  publish = "out"
 
 [build.environment]
   NODE_VERSION = "20"
-  # This site uses Next.js static export (output: "export").
-  # Skip the Next.js runtime plugin — it expects an SSR build and errors on a
-  # static export. We just publish the static "out" folder directly.
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
 
-# SPA-style fallback (single-page invitation, only "/" exists)
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+# Native Next.js build. On Netlify the official @netlify/plugin-nextjs handles
+# routing automatically. On Vercel this file is ignored (Vercel auto-detects Next).

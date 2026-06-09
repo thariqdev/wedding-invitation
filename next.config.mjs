@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Static export → produces ./out, deployable to Netlify / any static host
-  output: "export",
-  trailingSlash: true,
+  // Native Next.js build — Vercel/Netlify serve it directly. All pages are
+  // static (prerendered), so no server runtime is needed.
   images: { unoptimized: true },
 };
 
