@@ -13,7 +13,8 @@ import BougainvilleaBg from "@/components/cinematic/BougainvilleaBg";
 import { AmbientMusic } from "@/components/cinematic/ambient";
 
 export default function Page() {
-  const [started, setStarted] = useState(false);
+  const [started, setStarted] = useState(false); // tap happened → gate begins exit
+  const [revealed, setRevealed] = useState(false); // gate exit done → content shows
   const [soundOn, setSoundOn] = useState(true);
   const musicRef = useRef<AmbientMusic | null>(null);
 
@@ -23,13 +24,13 @@ export default function Page() {
     document.documentElement.style.background = "#000000";
   }, []);
 
-  // lock scroll only while the opening gate is up; always unlock once started
+  // keep scroll locked through the ENTIRE intro; unlock only once revealed
   useEffect(() => {
     const html = document.documentElement;
-    if (started) html.classList.remove("locked");
+    if (revealed) html.classList.remove("locked");
     else html.classList.add("locked");
     return () => html.classList.remove("locked");
-  }, [started]);
+  }, [revealed]);
 
   // tear down the audio engine on unmount
   useEffect(() => () => musicRef.current?.dispose(), []);
@@ -58,15 +59,33 @@ export default function Page() {
       <main className="relative z-10 overflow-x-hidden text-[#e9e2d2]">
         <CinematicFrame />
 
-        <TrailerScenes />
-        <Countdown />
-        <EventsReel />
-        <ClosingCredits />
+        {/* Invitation content — kept fully hidden until the gate has finished
+            exiting, so it can never flash/flicker before the reveal. */}
+        <div
+          style={{
+            opacity: revealed ? 1 : 0,
+            visibility: revealed ? "visible" : "hidden",
+            pointerEvents: revealed ? "auto" : "none",
+            transition: "opacity 900ms ease",
+          }}
+        >
+          <TrailerScenes />
+          <Countdown />
+          <EventsReel />
+          <ClosingCredits />
+        </div>
 
         {started && <SoundToggle on={soundOn} onToggle={toggleSound} />}
-        {started && <ScrollHint />}
+        {revealed && <ScrollHint />}
 
-        <OpeningGate onBegin={begin} hidden={started} />
+        {/* Gate stays until its fade-out completes, then unmounts cleanly */}
+        {!revealed && (
+          <OpeningGate
+            onBegin={begin}
+            hidden={started}
+            onExited={() => setRevealed(true)}
+          />
+        )}
       </main>
     </>
   );

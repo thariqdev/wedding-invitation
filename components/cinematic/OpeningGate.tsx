@@ -10,9 +10,11 @@ import { wedding } from "@/lib/wedding";
 export default function OpeningGate({
   onBegin,
   hidden,
+  onExited,
 }: {
   onBegin: () => void;
   hidden: boolean;
+  onExited?: () => void;
 }) {
   return (
     <motion.div
@@ -27,7 +29,10 @@ export default function OpeningGate({
       }}
       initial={{ opacity: 1 }}
       animate={{ opacity: hidden ? 0 : 1 }}
-      transition={{ duration: 1, ease: "easeInOut" }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
+      onAnimationComplete={() => {
+        if (hidden) onExited?.();
+      }}
       style={{ pointerEvents: hidden ? "none" : "auto" }}
     >
       <div className="film-grain pointer-events-none absolute inset-0 opacity-[0.3] mix-blend-overlay" />
