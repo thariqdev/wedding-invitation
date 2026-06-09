@@ -7,11 +7,12 @@ import SoundToggle from "@/components/cinematic/SoundToggle";
 import TrailerScenes from "@/components/cinematic/TrailerScenes";
 import EventsReel from "@/components/cinematic/EventsReel";
 import ClosingCredits from "@/components/cinematic/ClosingCredits";
+import { AmbientMusic } from "@/components/cinematic/ambient";
 
 export default function Page() {
   const [started, setStarted] = useState(false);
   const [soundOn, setSoundOn] = useState(true);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const musicRef = useRef<AmbientMusic | null>(null);
 
   // dark cinema backdrop
   useEffect(() => {
@@ -27,28 +28,27 @@ export default function Page() {
     return () => html.classList.remove("locked");
   }, [started]);
 
+  // tear down the audio engine on unmount
+  useEffect(() => () => musicRef.current?.dispose(), []);
+
   const begin = () => {
     setStarted(true);
-    if (soundOn) audioRef.current?.play().catch(() => {});
+    // create + start the synth on the user gesture (autoplay-safe)
+    if (!musicRef.current) musicRef.current = new AmbientMusic();
+    musicRef.current.setEnabled(soundOn);
+    musicRef.current.start();
   };
 
   const toggleSound = () => {
     setSoundOn((prev) => {
       const next = !prev;
-      const a = audioRef.current;
-      if (a) {
-        if (next) a.play().catch(() => {});
-        else a.pause();
-      }
+      musicRef.current?.setEnabled(next);
       return next;
     });
   };
 
   return (
     <main className="relative overflow-x-hidden bg-black text-[#e9e2d2]">
-      {/* ambient score — optional; silently no-ops if /music.mp3 is absent */}
-      <audio ref={audioRef} src="/music.mp3" loop preload="none" />
-
       <CinematicFrame />
 
       <TrailerScenes />
