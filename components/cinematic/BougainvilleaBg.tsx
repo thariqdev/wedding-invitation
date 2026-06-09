@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-// Drop a bougainvillea image here to enable the backdrop:
-//   public/bg-bougainvillea.jpg
+// Bougainvillea backdrop image (in /public).
 // If the file is absent, this renders nothing and the dark cinema look stays.
-const SRC = "/bg-bougainvillea.jpg";
+const SRC = "/bg3.jpeg";
 
 export default function BougainvilleaBg() {
   const [ok, setOk] = useState(false);
