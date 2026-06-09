@@ -30,14 +30,14 @@ export default function ClosingCredits() {
           We request your prayers &amp; presence
         </p>
         <h2
-          className="mt-6 text-[clamp(2.4rem,12vw,5rem)] uppercase leading-[0.9] text-[#e6b450]"
+          className="mt-6 flex flex-col items-center px-4 text-[clamp(2.4rem,13vw,5rem)] uppercase leading-[0.95] text-[#e6b450]"
           style={{ fontFamily: "var(--font-playfair)", fontWeight: 700 }}
         >
-          {wedding.bride.first}
-          <span className="mx-3 text-[#f2e6c8]" style={{ fontFamily: "var(--font-vibes)", textTransform: "none" }}>
+          <span>{wedding.bride.first}</span>
+          <span className="my-1 text-[0.6em] text-[#f2e6c8]" style={{ fontFamily: "var(--font-vibes)", textTransform: "none" }}>
             &amp;
           </span>
-          {wedding.groom.first}
+          <span>{wedding.groom.first}</span>
         </h2>
         <p className="mt-8 text-[0.7rem] uppercase tracking-[0.45em] text-[#9aa6b2]" style={{ fontFamily: "var(--font-cinzel)" }}>
           {wedding.hashtag}
