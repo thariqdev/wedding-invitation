@@ -70,29 +70,32 @@ function Scene({ children, className = "" }: { children: React.ReactNode; classN
   );
 }
 
-function Line({ children }: { children: React.ReactNode }) {
-  return (
-    <p
-      className="text-[clamp(2.4rem,10vw,5rem)] text-[#f2e6c8]"
-      style={{
-        fontFamily: "var(--font-bodoni)",
-        fontWeight: 400,
-        letterSpacing: "0.1em",
-        lineHeight: 1.2,
-        textShadow: "0 2px 30px rgba(0,0,0,0.6)",
-      }}
-    >
-      {children}
-    </p>
-  );
-}
-
 export default function TrailerScenes() {
   return (
     <>
-      <Scene><Line>Two souls.</Line></Scene>
-      <Scene><Line>One journey.</Line></Scene>
-      <Scene><Line>One date.</Line></Scene>
+      {/* Opening lines — combined into one cinematic scene, revealed in sequence */}
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center gap-5 overflow-hidden px-6 text-center sm:gap-8">
+        <SceneGlow />
+        {["Two souls.", "One journey.", "One date."].map((line, i) => (
+          <motion.p
+            key={line}
+            initial={{ opacity: 0, y: 22, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 1.1, delay: i * 0.5, ease: EASE }}
+            className="relative text-[clamp(2.1rem,9vw,4.5rem)] text-[#f2e6c8]"
+            style={{
+              fontFamily: "var(--font-bodoni)",
+              fontWeight: 400,
+              letterSpacing: "0.1em",
+              lineHeight: 1.2,
+              textShadow: "0 2px 30px rgba(0,0,0,0.6)",
+            }}
+          >
+            {line}
+          </motion.p>
+        ))}
+      </section>
 
       {/* Bismillah */}
       <Scene>
