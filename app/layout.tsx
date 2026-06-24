@@ -7,6 +7,7 @@ import {
   Great_Vibes,
   Outfit,
 } from "next/font/google";
+// @ts-ignore: side-effect CSS import (no type declarations)
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
