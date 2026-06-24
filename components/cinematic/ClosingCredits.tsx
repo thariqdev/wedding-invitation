@@ -20,11 +20,23 @@ export default function ClosingCredits() {
       </motion.p>
 
       <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.5 }}
+        transition={{ duration: 1.2, delay: 0.25, ease: EASE }}
+        className="mx-auto mt-7 max-w-sm space-y-3 text-[clamp(0.92rem,4vw,1.15rem)] italic leading-relaxed text-[#cdbf9f]"
+        style={{ fontFamily: "var(--font-cormorant)" }}
+      >
+        <p>As they begin their journey together in faith, love, and companionship.</p>
+        <p>Your presence and duas will be a blessing to the couple and their families.</p>
+      </motion.div>
+
+      <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true, amount: 0.5 }}
         transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
-        className="mt-14"
+        className="mt-12"
       >
         <p className="text-[0.66rem] uppercase tracking-[0.5em] text-[#9aa6b2]" style={{ fontFamily: "var(--font-cinzel)" }}>
           We request your prayers &amp; presence
