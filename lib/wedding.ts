@@ -64,8 +64,8 @@ export const wedding = {
       date: "06 Aug",
       day: "Thursday",
       year: "'26",
-      place: "Chemmad, Malappuram",
-      maps: "https://www.google.com/maps/search/?api=1&query=Chemmad+Malappuram",
+      place: "Our Residence, Kochi",
+      maps: "https://www.google.com/maps/search/?api=1&query=Kochi+Kerala",
     },
     {
       id: "nikkah",
