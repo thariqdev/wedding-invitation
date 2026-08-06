@@ -52,7 +52,7 @@ export const wedding = {
     dateISO: "2026-08-09T10:00:00+05:30",
     date: "09 Aug 2026",
     day: "Sunday",
-    time: "10:00 AM onwards",
+    time: "11:30 AM onwards",
     venue: "Trinita Casa Events & Banquet",
     location: "Edappally, Kochi",
   },
@@ -60,11 +60,15 @@ export const wedding = {
   events: [
     {
       id: "mehendi",
-      name: "Mehendi",
+      name: "Arabic Night & Mehendi",
       date: "06 Aug",
       day: "Thursday",
       year: "'26",
-      place: "Our Residence, Kochi",
+      details: [
+        "Our Residence, Kochi",
+        "Arabic Night: 4 PM onwards",
+        "Mehendi: 6 PM onwards",
+      ],
       maps: "https://www.google.com/maps/search/?api=1&query=Kochi+Kerala",
     },
     {
@@ -73,7 +77,7 @@ export const wedding = {
       date: "07 Aug",
       day: "Friday",
       year: "'26",
-      place: "Zubaida Park Auditorium, Vengara",
+      details: ["Zubaida Park Auditorium, Vengara"],
       maps: "https://www.google.com/maps/search/?api=1&query=Zubaida+Park+Auditorium+Vengara+Kerala",
     },
     {
@@ -82,7 +86,7 @@ export const wedding = {
       date: "09 Aug",
       day: "Sunday",
       year: "'26",
-      place: "Trinita Casa Events & Banquet, Edappally",
+      details: ["Trinita Casa Events & Banquet, Edappally"],
       maps: "https://www.google.com/maps/search/?api=1&query=Trinita+Casa+Events+Banquet+Edappally+Kochi",
     },
   ],

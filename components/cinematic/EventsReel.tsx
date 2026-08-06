@@ -43,9 +43,17 @@ export default function EventsReel() {
               <p className="text-[clamp(1.3rem,6vw,1.7rem)] uppercase leading-none text-[#f2e6c8]" style={{ fontFamily: "var(--font-playfair)", fontWeight: 600, letterSpacing: "0.04em" }}>
                 {ev.name}
               </p>
-              <p className="mt-2 text-[0.9rem] italic text-[#cdbf9f]" style={{ fontFamily: "var(--font-cormorant)" }}>
-                {ev.place}
-              </p>
+              <div className="mt-2 space-y-1">
+                {ev.details.map((detail, detailIndex) => (
+                  <p
+                    key={detail}
+                    className={`text-[0.9rem] italic ${detailIndex === 0 ? "text-[#cdbf9f]" : "text-[#e6b450]"}`}
+                    style={{ fontFamily: "var(--font-cormorant)" }}
+                  >
+                    {detail}
+                  </p>
+                ))}
+              </div>
             </div>
             <div className="text-right">
               <p className="text-[0.62rem] uppercase tracking-[0.18em] text-[#9aa6b2]" style={{ fontFamily: "var(--font-cinzel)" }}>
